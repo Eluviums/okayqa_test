@@ -308,7 +308,7 @@
 			"response": []
 		},
 		{
-			"name": "Delete new job",
+			"name": "Dlet new job",
 			"event": [
 				{
 					"listen": "test",
