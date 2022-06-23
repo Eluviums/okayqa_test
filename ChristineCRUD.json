@@ -1,0 +1,374 @@
+{
+	"info": {
+		"_postman_id": "97768aff-e914-4cd5-89d1-64c3f5c01b4c",
+		"name": "Christine CRUD collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18952584"
+	},
+	"item": [
+		{
+			"name": "All jobs",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//проверка на статус-код 200\r",
+							"pm.test(\"Verify Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"//Проверка на скорость ответа сервера\r",
+							"pm.test(\"Verify that response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"//Проверка хэдера ответа\r",
+							"pm.test(\"Verify that sample request header should be returned in response body\", function () {\r",
+							"    pm.response.to.have.jsonBody();\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/api/job/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"job",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create new job",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"//var name = pm.variables.replaceIn('{{$randomLastName}}')\r",
+							"\r",
+							"pm.environment.set(\"randomName\", pm.variables.replaceIn('{{$randomLastName}}'));\r",
+							"\r",
+							"var job = pm.variables.replaceIn ('{{$randomJobTitle}}')\r",
+							"\r",
+							"pm.environment.set(\"randomJobTitle\", job);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"// проверка на статус-код \r",
+							"pm.test(\"Verify that Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"//Проверка на успешное создание юзера\r",
+							"pm.test(\"Verify successful POST request\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"//Проверка на скорость ответа сервера\r",
+							"pm.test(\"Verify that response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"//Проверка хэдера ответа\r",
+							"pm.test(\"Verify that sample request header should be returned in response body\", function () {\r",
+							"    pm.response.to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Verify that random Name is returned\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.name).to.eql(pm.environment.get(\"randomName\"));\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Verify that random job title is returned\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.job).to.eql(pm.environment.get(\"randomJobTitle\"));\r",
+							"    });\r",
+							"\r",
+							"\r",
+							"//Сохраняем весь ответ сервера\r",
+							"var response = JSON.parse(responseBody)\r",
+							"//Сохранение полученного значения из поля \r",
+							"pm.environment.set('id', response.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"name\": \"{{randomName}}\",\r\n\"job\": \"{{randomJobTitle}}\"\r\n}\r\n\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/api/job",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"job"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Boba",
+							"disabled": true
+						},
+						{
+							"key": "job",
+							"value": "Director",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Single job",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Позитивная проверка на статус-код 200\r",
+							"pm.test(\"Verify Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"//Проверка на скорость ответа сервера\r",
+							"pm.test(\"Verify that response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"//Проверка хэдера ответа\r",
+							"pm.test(\"Verify that sample request header should be returned in response body\", function () {\r",
+							"    pm.response.to.have.jsonBody();\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/api/job/{{id}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"job",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update new job",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"\r",
+							"//var name = pm.variables.replaceIn('{{$randomLastName}}')\r",
+							"\r",
+							"pm.environment.set(\"randomName\", pm.variables.replaceIn('{{$randomLastName}}'));\r",
+							"\r",
+							"var job = pm.variables.replaceIn ('{{$randomJobTitle}}')\r",
+							"\r",
+							"pm.environment.set(\"randomJobTitle\", job);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"//проверка на статус код\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"//Проверка тела ответа\r",
+							"pm.test(\"response has valid json body\", function () {\r",
+							"    pm.response.to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"\r",
+							"//проверка заголовка ответа\r",
+							"pm.test(\"sample request header should be returned in response body\", function () {\r",
+							"    pm.response.to.have.jsonBody();\r",
+							"});\r",
+							"//проверка на базовую работоспособность (время ответа)\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Verify that random Name is returned\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.name).to.eql(pm.environment.get(\"randomName\"));\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Verify that random job title is returned\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.job).to.eql(pm.environment.get(\"randomJobTitle\"));\r",
+							"    });"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"name\": \"{{randomName}}\",\r\n\"job\": \"{{randomJobTitle}}\"\r\n}\r\n\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/api/job/{{id}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"job",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete new job",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"//Проверка на скорость ответа сервера\r",
+							"pm.test(\"Verify that response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"//Проверка хэдера ответа\r",
+							"pm.test(\"Verify that sample request header should be returned in response body\", function () {\r",
+							"    pm.response.to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"//Проверка тела ответа\r",
+							"pm.test(\"Verify that response has valid json body\", function () {\r",
+							"    pm.response.to.have.jsonBody();\r",
+							"});\r",
+							"\r",
+							"//Проверка на успешное удаление сущности\r",
+							"\r",
+							"pm.test(\"Verify that Status code is 404\", function () {\r",
+							"    pm.sendRequest('https://6107f174d73c6400170d372d.mockapi.io/api/job/{{id}}', function (err, res) {\r",
+							"        pm.expect(err).to.not.be.ok;\r",
+							"        pm.expect(res).to.have.property('code', 404);\r",
+							"    });\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/api/job/{{id}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"job",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
